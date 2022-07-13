@@ -59,8 +59,8 @@ export const Login = () => {
           </Text>
         </Grid>
         <Grid
-          onSubmit={handleSubmit(handleLogin)}
           as="form"
+          onSubmit={handleSubmit(handleLogin)}
           mt="4"
           w="50%"
           padding="30px 15px"
