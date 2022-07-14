@@ -29,6 +29,7 @@ interface AuthContextDate{
     user: User;
     accessToken: string;
     login: (Credential: login) => Promise<void>;
+    logOut: () => void;
 }
 
 const AuthContext = createContext<AuthContextDate>({} as AuthContextDate)
@@ -66,9 +67,17 @@ const AuthProvaider = ({children}: AuthProvaiderProps) => {
         setData({accessToken,user}); 
     },[])
 
+    const logOut = useCallback(() =>{
+        localStorage.removeItem("@Do-it:accessToken")
+        localStorage.removeItem("@Do-it:user")
+
+        setData({} as AuthState)
+    },[])
+
     return(
         <AuthContext.Provider value={{
             login,
+            logOut,
             user: data.user,
             accessToken: data.accessToken
         }}>{children}</AuthContext.Provider>
