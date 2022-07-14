@@ -15,19 +15,22 @@ import { FieldValues, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
+import { useAuth } from "../../contexts/authContext";
 
 const LoginSchema = yup.object().shape({
   email: yup.string().required("Email obrigatório").email("Email inválido"),
-  senha: yup.string().required("Senha obrigatória"),
+  passwod: yup.string().required("Senha obrigatória"),
 });
 
 interface LoginData extends FieldValues {
   email: string;
-  senha: string;
+  password: string;
 }
 
 export const Login = () => {
   const [loading, setLoading] = useState(false);
+
+  const {login} = useAuth();
 
   const {
     register,
@@ -38,7 +41,10 @@ export const Login = () => {
     resolver: yupResolver(LoginSchema),
   });
 
-  const handleLogin = (data: LoginData) => console.log(data);
+  const handleLogin = (data: LoginData) => {
+    setLoading(true);
+    login(data).then((_) => setLoading(false)).catch((error) => setLoading(false));
+  }
 
   return (
     <Flex
@@ -105,9 +111,9 @@ export const Login = () => {
               icon={FaLock}
               label="Senha"
               type="password"
-              error={errors.senha}
+              error={errors.password}
               placeholder="Digite sua Senha"
-              {...register("Senha")}
+              {...register("passwod")}
             />
           </VStack>
           <VStack mt="4" spacing="5">
