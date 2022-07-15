@@ -25,7 +25,6 @@ export const LoginForm = () => {
     const {
       register,
       handleSubmit,
-      watch,
       formState: { errors },
     } = useForm<LoginData>({
       resolver: yupResolver(LoginSchema),

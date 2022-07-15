@@ -1,18 +1,4 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Grid,
-  Heading,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
-import { Input } from "../../components/Form/input";
-import { FieldValues, useForm } from "react-hook-form";
-
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
-import { useAuth } from "../../contexts/authContext";
+import {Flex,} from "@chakra-ui/react";
 import { LoginInfo } from "./loginInfo";
 import { LoginForm } from "./loginForm";
 
