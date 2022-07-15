@@ -1,10 +1,42 @@
-import {Flex,} from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useState } from "react";
+import { FieldValues, useForm } from "react-hook-form";
+import { useAuth } from "../../contexts/authContext";
 import { LoginInfo } from "./loginInfo";
 import { LoginForm } from "./loginForm";
+import * as yup from "yup";
 
+const LoginSchema = yup.object().shape({
+  email: yup.string().required("Email obrigatório").email("Email inválido"),
+  passwod: yup.string().required("Senha obrigatória"),
+});
+
+interface LoginData extends FieldValues {
+  email: string;
+  password: string;
+}
 
 export const Login = () => {
-  
+  const { login } = useAuth();
+
+  const [loading, setLoading] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: {errors},
+  } = useForm<LoginData>({
+    resolver: yupResolver(LoginSchema),
+  });
+
+  const handleLogin = (data: LoginData) => {
+    setLoading(true);
+    login(data)
+      .then((_) => setLoading(false))
+      .catch((error) => setLoading(false));
+  };
+
   return (
     <Flex
       alignItems="center"
@@ -24,10 +56,14 @@ export const Login = () => {
         justifyContent="center"
         flexDirection={["column", "column", "row", "row"]}
         alignItems="center"
-        
       >
-        <LoginInfo/>
-        <LoginForm/>
+        <LoginInfo />
+        <LoginForm
+          errors={errors}
+          handleLogin={handleSubmit(handleLogin)}
+          loading={loading}
+          register={register}
+        />
       </Flex>
     </Flex>
   );

@@ -1,45 +1,30 @@
 import { Box, Button, Grid, Heading, Text, VStack } from "@chakra-ui/react"
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
-import { FieldValues, useForm } from "react-hook-form";
-import { useAuth } from "../../contexts/authContext";
+import { DeepMap, FieldError, FieldValues, UseFormRegister } from "react-hook-form";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import {Input} from "../../components/Form/input"
-import * as yup from "yup";
 
-const LoginSchema = yup.object().shape({
-    email: yup.string().required("Email obrigatório").email("Email inválido"),
-    passwod: yup.string().required("Senha obrigatória"),
-  });
-  
-  interface LoginData extends FieldValues {
-    email: string;
-    password: string;
-  }
+interface LoginData extends FieldValues {
+  email: string;
+  password: string;
+}
 
-export const LoginForm = () => {
-    const {login} = useAuth();
+interface LoginFormProps{
+  handleLogin: () => void;
+  register: UseFormRegister<LoginData>;
+  errors: Partial<DeepMap<LoginData, FieldError>>
+  loading: boolean;
+};
 
-    const [loading, setLoading] = useState(false);
-  
-    const {
-      register,
-      handleSubmit,
-      formState: { errors },
-    } = useForm<LoginData>({
-      resolver: yupResolver(LoginSchema),
-    });
-  
-    const handleLogin = (data: LoginData) => {
-      setLoading(true);
-      login(data).then((_) => setLoading(false)).catch((error) => setLoading(false));
-    }
+
+
+
+export const LoginForm = ({handleLogin, register, errors, loading}: LoginFormProps) => {
   
 
     return (
         <Grid
           as="form"
-          onSubmit={handleSubmit(handleLogin)}
+          onSubmit={handleLogin}
           mt="10"
           w={["100%", "100%", "50%", "50%"]}
           padding="30px 15px"
